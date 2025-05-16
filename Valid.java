@@ -1,3 +1,5 @@
+
+
 package Steno;
 
 import org.testng.annotations.Test;
@@ -23,7 +25,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
-public class Demo
+public class Valid
 {
 
 	
@@ -80,9 +82,9 @@ public class Demo
 			// int rowCount = sheet.getPhysicalNumberOfRows();
 
 			
+			Actions act = new Actions(driver);
 			
-			
-			for (int i = 1; i <= 6; i++) { // Start from row 1 to skip header
+			for (int i = 8; i <= 10; i++) { // Start from row 1 to skip header
 				Row row = sheet.getRow(i);
 				
 				if (row == null) {
@@ -177,27 +179,21 @@ public class Demo
 					Select select1 = new Select(dropdown);
 					select1.selectByIndex(applyingpost);
 
-					driver.findElement(By.id("Applicant_FullName")).sendKeys(name);
-					Thread.sleep(300);
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_FullName"))).sendKeys(name);
 
-					driver.findElement(By.id("Applicant_FatherName")).sendKeys(father);
-					Thread.sleep(300);
-
-					driver.findElement(By.id("Applicant_MotherName")).sendKeys(mother);
-					Thread.sleep(300);
-
-					driver.findElement(By.id("Applicant_EmailId")).sendKeys(email);
-					Thread.sleep(300);
-
-					driver.findElement(By.id("Applicant_MobileNo")).sendKeys(mob);
-					Thread.sleep(300);
-
-					driver.findElement(By.id("Applicant_AadharNo")).sendKeys(adhar);
-					Thread.sleep(200);
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_FatherName"))).sendKeys(father);
+				
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_MotherName"))).sendKeys(mother);
+					
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_EmailId"))).sendKeys(email);
+				
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_MobileNo"))).sendKeys(mob);
+			
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_AadharNo"))).sendKeys(adhar);
 
 					// Enter Date of Birth
 					js.executeScript("window.scrollBy(0,500);");
-					WebElement dobField = driver.findElement(By.id("Applicant_DateOfBirth"));
+					WebElement dobField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_DateOfBirth")));
 					dobField.sendKeys(dob);
 					Thread.sleep(200);
 					Robot robot = new Robot();
@@ -205,34 +201,26 @@ public class Demo
 					robot.keyRelease(KeyEvent.VK_ENTER);
 					js.executeScript("window.scrollBy(0,200)", "");
 
-					WebElement gen = driver.findElement(By.id("Applicant_Reservation_GenderCode"));
-				
+					WebElement gen = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_Reservation_GenderCode")));
 					Select ss1 = new Select(gen);
-					Thread.sleep(1000);
-					String gen1 = gen.getText();
-
+					Thread.sleep(100);
+				
 					int dropdownIndex = (int) row.getCell(10).getNumericCellValue();
-					Actions act = new Actions(driver);
-					// Select the dropdown option using the index
-				//	System.out.println("Selecting option with index: " + dropdownIndex);
 					ss1.selectByIndex(dropdownIndex);
 
-					Thread.sleep(200);// Applicant_ContactAddress
-					driver.findElement(By.id("Applicant_ContactAddress_DoorNo")).sendKeys(doorno);
-					Thread.sleep(200);
-					driver.findElement(By.id("Applicant_ContactAddress_Street")).sendKeys(street);
-					Thread.sleep(300);
+			       // Applicant_ContactAddress
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_DoorNo"))).sendKeys(doorno);
+				
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_Street"))).sendKeys(street);
 					
 					js.executeScript("window.scrollBy(0,200)", "");
-					driver.findElement(By.id("Applicant_ContactAddress_Taluk")).sendKeys(taluk);
-					Thread.sleep(300);
-					driver.findElement(By.id("Applicant_ContactAddress_City")).sendKeys(city);
-					WebElement stt = driver.findElement(By.id("Applicant_ContactAddress_UnionStateCode"));
-					Thread.sleep(500);
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_Taluk"))).sendKeys(taluk);
+					
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_City"))).sendKeys(city);
+					WebElement stt =wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_UnionStateCode")));
 					act.moveToElement(stt).click().perform();
 					Thread.sleep(500);
 					Select ss2 = new Select(stt);
-					Thread.sleep(500);
 					
 					String state = stt.getText();
 
@@ -263,12 +251,12 @@ public class Demo
 					if (district.equals("Other")) { // Only proceed if the index is not 1
 					    ss3.selectByIndex(dropdownIndex2);  // Select the dropdown item by the given index
 					//    System.out.println("Selected index: " + dropdownIndex2);
-					    WebDriverWait wait0 = new WebDriverWait(driver, Duration.ofSeconds(20));
+					    
 
-						WebElement otherddis = wait0.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_OtherDistrictName")));
+						WebElement otherddis = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_ContactAddress_OtherDistrictName")));
 
-						wait0.until(ExpectedConditions.visibilityOf(otherddis));
-						wait0.until(ExpectedConditions.elementToBeClickable(otherddis));
+						wait.until(ExpectedConditions.visibilityOf(otherddis));
+						wait.until(ExpectedConditions.elementToBeClickable(otherddis));
 						otherddis.sendKeys(othdis);
 					} else {
 						
@@ -340,15 +328,17 @@ public class Demo
 					r.keyPress(KeyEvent.VK_ENTER);
 					r.keyRelease(KeyEvent.VK_ENTER);
 					Thread.sleep(500);
+					js.executeScript("arguments[0].scrollIntoView(true)", cd);
 
 					js.executeScript("window.scrollBy(0,200)", "");
 					
 		            WebDriverWait wait55 = new WebDriverWait(driver, Duration.ofSeconds(20));
-
+		            Thread.sleep(1000);
 					WebElement cdd = wait55.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='Applicant_Reservation_AreYouAGovermentEmployee' and @value='True']")));
 					wait55.until(ExpectedConditions.visibilityOf(cdd));
 					wait55.until(ExpectedConditions.elementToBeClickable(cdd));
 					cdd.click();
+					js.executeScript("arguments[0].scrollIntoView(true);", cdd);
 				
 				//	WebElement cdd = driver.findElement(By.xpath("//input[@id='Applicant_Reservation_AreYouAGovermentEmployee' and @value='True']"));
 					//act.moveToElement(cdd).click().perform();
@@ -382,38 +372,39 @@ public class Demo
 					Thread.sleep(500);
 					Select ss7 = new Select(day);
 					ss7.selectByIndex(day_index);
-
-					WebElement ab = driver.findElement(By.xpath("//input[@id='Applicant_CriminalActivity_HasDepartmentEnquiry' and @value='True']"));
+					Thread.sleep(500);
+					WebElement ab =wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='Applicant_Reservation_GovermentServiceDetail_HasDepartmentEnquiry' and @value='True']")));
+					//WebElement ab = driver.findElement(By.xpath("//input[@id='Applicant_CriminalActivity_HasDepartmentEnquiry' and @value='True']"));
 					act.moveToElement(ab).click().perform();
 					Thread.sleep(500);
 
 					// Enter details in the "Department Enquiry Detail" field
-					driver.findElement(By.id("Applicant_CriminalActivity_DepartmentEnquiryDetail")).sendKeys(dep_eq);
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_Reservation_GovermentServiceDetail_DepartmentEnquiryDetail"))).sendKeys(dep_eq);
 
 					js.executeScript("window.scrollBy(0,400)");
 					Thread.sleep(500);
 
-					WebElement cr = driver.findElement(By.xpath("//input[@id='Applicant_CriminalActivity_IsInvolvedInCriminalActivity' and @value='True']"));
+					WebElement cr = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='Applicant_CriminalActivity_IsInvolvedInCriminalActivity' and @value='True']")));
 					act.moveToElement(cr).click().perform();
 					Thread.sleep(500);
 
-					driver.findElement(By.id("Applicant_CriminalActivity_CaseDetail")).sendKeys(crime_detail);
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_CriminalActivity_CaseDetail"))).sendKeys(crime_detail);
 					js.executeScript("window.scrollBy(0,200)", "");
-					Thread.sleep(500);
-
+				
+					Thread.sleep(5000);
 					WebElement crd = driver.findElement(By.xpath("//input[@id='Applicant_CriminalActivity_IsConvictedInCriminalCase' and @value='True']"));
 					act.moveToElement(crd).click().perform(); // Move to the element and click it
 					Thread.sleep(500);
 
-					driver.findElement(By.id("Applicant_CriminalActivity_ConvictionDetail")).sendKeys(CA_detail);
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_CriminalActivity_ConvictionDetail"))).sendKeys(CA_detail);
 					Thread.sleep(500);
 
 					// for sslc yes
 				
-					WebElement sslc = driver.findElement(By.xpath("//input[@id='Applicant_EducationalQualification_IsSSLCHolder' and @value='True']"));
+					WebElement sslc = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='Applicant_EducationalQualification_IsSSLCHolder' and @value='True']")));
 					Thread.sleep(300);
 					act.moveToElement(sslc).click().perform();
-					Thread.sleep(300);
+					
 					
 					//for sslc board
 					WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -425,15 +416,11 @@ public class Demo
 					JavascriptExecutor js1 = (JavascriptExecutor) driver;
 					Select ss8 = new Select(board);
 					ss8.selectByIndex(board1);
-				//	System.out.println("Dropdown option selected!");
-					// Ensure board1 is equal to 3 before proceeding
-				//	System.out.println("board1 value: " + board1);
-
+			
 					if (board1==3) {
 					  
 					    ss8.selectByIndex(board1); 
-					  //  System.out.println("Selected index: " + board1);
-
+					
 					  
 					    WebElement sslcother = wait1.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_EducationalQualification_SSLCQualification_OtherBoardName")));
 					    wait1.until(ExpectedConditions.visibilityOf(sslcother));
@@ -445,7 +432,7 @@ public class Demo
 					}
 					js.executeScript("window.scrollBy(0,200)");
 					
-					//for sslc Kannada medium paper
+				
 					WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(20));
 					WebElement paper = wait1.until(ExpectedConditions.presenceOfElementLocated(By.id("Applicant_EducationalQualification_SSLCQualification_KannadaLanguagePaper")));
 					wait2.until(ExpectedConditions.visibilityOf(paper));
@@ -530,8 +517,8 @@ public class Demo
 					
 					
 					// for puc
-					WebElement puc = driver.findElement(By.xpath("//input[@id='Applicant_EducationalQualification_IsPUCHolder' and @value='True']"));
-					Thread.sleep(2000);
+					WebElement puc = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='Applicant_EducationalQualification_IsPUCHolder' and @value='True']")));
+					Thread.sleep(500);
 					act.moveToElement(puc).click().perform();
 					
 					//for puc board
@@ -711,73 +698,13 @@ public class Demo
 					js.executeScript("window.scrollBy(0,200)", "");
 					Thread.sleep(1000);
 					
+				try {	
 					// for click on preview
-					
-					
 					WebElement pr = driver.findElement(By.id("preview-btn"));
 					act.moveToElement(pr).click().perform();
 					r.keyPress(KeyEvent.VK_ENTER);
 					r.keyRelease(KeyEvent.VK_ENTER);
-					
-					Sheet sheet2 = workbook.getSheetAt(3);
-				    Row row1 = sheet2.createRow(sheet2.getPhysicalNumberOfRows()); 
-					WebElement appdetails = driver.findElement(By.xpath("//h5[@id='exampleModalCenterTitle']"));
-					String details1 = appdetails.getText();
-					
-					if(!isElementClickable(driver, appdetails))
-					{try {
-					    boolean hasError = true;
-
-					    // List of specific error IDs (extend this as needed)
-					    String[] errorIds = {
-					        "Applicant_FullName-error", "Applicant_FatherName-error", "Applicant_MotherName-error",
-					        "Applicant_EmailId-error", "Applicant_MobileNo-error", "Applicant_AadharNo-error", "Applicant_DateOfBirth-error",
-					        "Applicant_Reservation_GenderCode-error","Applicant_ContactAddress_DoorNo-error","Applicant_ContactAddress_Street-error",
-					        "Applicant_ContactAddress_Taluk-error","Applicant_ContactAddress_OtherDistrictName-error","pincodeInput-error",
-					        "Applicant_ContactAddress_Landmark-error","Applicant_NativeDistrict-error","Applicant_PermanentAddress_DoorNo-error",
-					        "Applicant_PermanentAddress_Street-error","Applicant_PermanentAddress_Taluk-error","Applicant_PermanentAddress_City-error",
-					        "Applicant_PermanentAddress_OtherDistrictName-error","Applicant_PermanentAddress_Pincode-error","Applicant_PermanentAddress_Landmark-error",
-					        "Applicant_Reservation_SubCaste-error","Applicant_Reservation_GovermentServiceDetail_Department-error","Applicant_Reservation_GovermentServiceDetail_Designation-error",
-					        "Applicant_Reservation_GovermentServiceDetail_MonthsInService-error","Applicant_CriminalActivity_DepartmentEnquiryDetail-error","Applicant_CriminalActivity_CaseDetail-error",
-					        "Applicant_CriminalActivity_ConvictionDetail-error","Applicant_EducationalQualification_SSLCQualification_OtherBoardName-error","Applicant_EducationalQualification_SSLCQualification_Score_Maximum-error",
-					        "Applicant_EducationalQualification_SSLCQualification_Score_Obtained-error","Applicant_EducationalQualification_SSLCQualification_RegistrationNo-error","Applicant_EducationalQualification_PUCQualification_OtherBoardName-error",
-					        "Applicant_EducationalQualification_PUCQualification_ScorePercentage-error","Applicant_EducationalQualification_PUCQualification_RegistrationNo-error","Applicant_IdentificationMark_01-error","Applicant_IdentificationMark_02-error",
-					        "Applicant_UploadedIDNo-error"
-					    };
-					    
-					    System.out.println(i + " : Iteration Failed");
-		                Reporter.log(i + " : Iteration Failed");
-
-					    // Create WebDriverWait with reduced timeout (e.g., 10 seconds)
-					    WebDriverWait wait111 = new WebDriverWait(driver, Duration.ofMillis(10));
-					    String ro = "Failed";
-					    row1.createCell(1).setCellValue(ro);
-					    // Loop through each error ID to check if the corresponding error message is displayed
-					    for (String errorId : errorIds) {
-					        try {
-					            WebElement errorMessage = wait111.until(ExpectedConditions.visibilityOfElementLocated(By.id(errorId)));
-					            if (errorMessage != null && !errorMessage.getText().isEmpty()) {
-					                hasError = false;
-					                String er = errorMessage.getText();
-					               
-					                System.out.println("Error in field: " + errorId + " - " + er);
-					              //  row1.createCell(1).setCellValue(er);
-					                Reporter.log(i + " iteration" + " Error in field of " + errorId + " - " + er);
-					            }
-					            if (!isElementClickable(driver, pr)) {
-					                r.keyPress(KeyEvent.VK_ENTER);
-					                r.keyRelease(KeyEvent.VK_ENTER);
-					            }
-					        } catch (TimeoutException e) {
-					            // Handle no error message for this field
-					//  System.out.println("No error for field: " + errorId);
-					        }
-					    }
-					} catch (Exception q) {
-					  //  q.printStackTrace();  // Log any other exceptions
-					}}
-
-				try {	
+					Thread.sleep(1000);
 					
 					//for preview contents
 					
@@ -788,7 +715,8 @@ public class Demo
 					String appnamep = appname.getText();
 				//	System.out.println(appname.getText());
 					jss12.executeScript("arguments[0].scrollIntoView(true);", appname);
-					
+					Sheet sheet2 = workbook.getSheetAt(3);
+				    Row row1 = sheet2.createRow(sheet2.getPhysicalNumberOfRows()); 
 					WebDriverWait wait24 = new WebDriverWait(driver, Duration.ofSeconds(20));
 
 				
@@ -1083,19 +1011,19 @@ public class Demo
 					String dessgovt = desggovt.getText();
 					
 					
-					WebElement deptenq = wait43.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='DepartmentalEnquirPreview']")));
-					wait43.until(ExpectedConditions.visibilityOf(deptenq));
-					wait43.until(ExpectedConditions.elementToBeClickable(deptenq));
-				//	System.out.println(deptenq.getText());
-					String depen = deptenq.getText();
-					 jss12.executeScript("arguments[0].scrollIntoView(true);", deptenq);
-
-					
-					WebElement enquirydeat = wait43.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='DeptenqdetailsPreview']")));
-					wait43.until(ExpectedConditions.visibilityOf(enquirydeat));
-					wait43.until(ExpectedConditions.elementToBeClickable(enquirydeat));
-				//	System.out.println(enquirydeat.getText());
-					String enqdetails = enquirydeat.getText();
+//					WebElement deptenq = wait43.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='DepartmentalEnquirPreview']")));
+//					wait43.until(ExpectedConditions.visibilityOf(deptenq));
+//					wait43.until(ExpectedConditions.elementToBeClickable(deptenq));
+//				//	System.out.println(deptenq.getText());
+//					String depen = deptenq.getText();
+//					 jss12.executeScript("arguments[0].scrollIntoView(true);", deptenq);
+//
+//					
+//					WebElement enquirydeat = wait43.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='DeptenqdetailsPreview']")));
+//					wait43.until(ExpectedConditions.visibilityOf(enquirydeat));
+//					wait43.until(ExpectedConditions.elementToBeClickable(enquirydeat));
+//				//	System.out.println(enquirydeat.getText());
+//					String enqdetails = enquirydeat.getText();
 					// jss12.executeScript("arguments[0].scrollIntoView(true);", enquirydeat);
 					
 					WebElement criminalcase = wait43.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='CriminalCasesPreview']")));
@@ -1397,8 +1325,8 @@ public class Demo
                     row1.createCell(39).setCellValue(monthserv);
                     row1.createCell(40).setCellValue(dayser);
                     row1.createCell(41).setCellValue(dessgovt);
-                    row1.createCell(42).setCellValue(depen);
-                    row1.createCell(43).setCellValue(enqdetails);
+//                    row1.createCell(42).setCellValue(depen);
+//                    row1.createCell(43).setCellValue(enqdetails);
                     row1.createCell(44).setCellValue(crimcase);
                     row1.createCell(45).setCellValue(crimedetails);
                     row1.createCell(46).setCellValue(convcrime);
@@ -1546,20 +1474,13 @@ public class Demo
 		            System.out.println("ITERATION:");
 		            System.out.println(i +" iteration succesfully completed ");
 				}
-				
-				
-				
-				
 				catch (Exception e) {
 			        // Log the exception details
-			        System.out.println("Error occurred in iteration " + i );
-			      //  e.printStackTrace();
-			        boolean hasError = false;
-
-                    // List of specific error IDs (extend this as needed)
-               
+			        System.out.println("Error occurred in iteration " + i + ": " + e.getMessage());
+			        e.printStackTrace();
+			        
 			        // Continue with the next iteration
-			     //   Reporter.log("Failed :");
+			        Reporter.log("Failed :");
 			        Reporter.log(i +" iteration is Skipping due to an error.");
 			        
 			        // Close the current application window
@@ -1618,7 +1539,7 @@ public class Demo
             // Close workbook after operations are done
             // Note: Don't close the workbook until all operations are finished
             if (driver != null) {
-               driver.quit(); // Close the WebDriver session
+              // driver.quit(); // Close the WebDriver session
             }
         }
     }
@@ -1644,15 +1565,6 @@ public class Demo
                 return String.valueOf(cell.getBooleanCellValue());
             default:
                 return "";
-        }
-    }
-    private boolean isElementClickable(WebDriver driver, WebElement element) {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
-            wait.until(ExpectedConditions.elementToBeClickable(element));
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
  private void switchToNewWindow(WebDriver driver) {
